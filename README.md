@@ -1,6 +1,8 @@
-# solidity-simple-storage-hardhat
+# solidity-fund-me-hardhat
 
-### Hardhat project demonstrating compiling and deployment
+### Solidity-Hardhat project
+
+- `cd` to the repo after cloning it
 
 - Run `npm install` to have setup and packages
 
@@ -9,6 +11,8 @@
 - After cleanup, run `npx hardhat compile` to compile solidity contract present in contracts folder
 
 - After compile process completes, run `npx hardhat run .\scripts\deploy.js` to deploy the contract into local Hardhat network. You would also see address at which contract is deployed on console screen.
+
+We will be using hardhat-deploy package for deployment.
 
 - Deployment on testnets such as Sepolia would be different. Run below command and observe the output.
 

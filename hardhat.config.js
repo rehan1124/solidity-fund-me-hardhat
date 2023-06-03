@@ -1,5 +1,7 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("hardhat-gas-reporter");
+require("hardhat-deploy");
+require("@nomiclabs/hardhat-ethers");
 require("dotenv").config();
 require("./tasks/tasks");
 
