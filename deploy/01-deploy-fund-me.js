@@ -1,7 +1,6 @@
 const { network } = require("hardhat");
 
 const deployFunc = async (hre, deploymentNetwork) => {
-  console.log("--- Starting deployment process ---");
   const { getNamedAccounts, deployments } = hre;
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();

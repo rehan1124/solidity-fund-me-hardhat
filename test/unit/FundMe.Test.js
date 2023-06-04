@@ -31,5 +31,41 @@ describe("Fund-me", async function () {
       const response = await fundMe.addressToMoneyFunded(deployer);
       assert.equal(response.toString(), ethers.utils.parseUnits("1000", "wei"));
     });
+
+    it("Should add funders in the list if minimum amount or more is sent", async function () {
+      await fundMe.fund({ value: ethers.utils.parseUnits("1000", "wei") });
+      const newFunder = await fundMe.funders(0);
+      assert.equal(newFunder, deployer);
+    });
+  });
+
+  describe("When user tries to withdraw money", async function () {
+    beforeEach(async function () {
+      await fundMe.fund({ value: ethers.utils.parseUnits("1000", "wei") });
+    });
+
+    it("Should allow withdraw from single funder", async function () {
+      // Arrange
+      const contractBalance = await fundMe.provider.getBalance(fundMe.address);
+      const funderBalance = await fundMe.provider.getBalance(deployer);
+
+      // Act
+      const txResponse = await fundMe.withdraw();
+      const txResponseReceipt = await txResponse.wait(1);
+      const { gasUsed, effectiveGasPrice } = txResponseReceipt;
+      const gasCost = gasUsed.mul(effectiveGasPrice);
+
+      const contractBalanceAfterTx = await fundMe.provider.getBalance(
+        fundMe.address
+      );
+      const funderBalanceAfterTx = await fundMe.provider.getBalance(deployer);
+
+      // Assert
+      assert.equal(contractBalanceAfterTx, 0);
+      assert.equal(
+        contractBalance.add(funderBalance).toString(),
+        funderBalanceAfterTx.add(gasCost).toString()
+      );
+    });
   });
 });
