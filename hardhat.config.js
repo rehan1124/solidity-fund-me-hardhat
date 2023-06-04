@@ -35,4 +35,9 @@ module.exports = {
     currency: CURRENCY,
     coinmarketcap: COIN_MARKET_KEY,
   },
+  namedAccounts: {
+    deployer: {
+      default: 0,
+    },
+  },
 };
