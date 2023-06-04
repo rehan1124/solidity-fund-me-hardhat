@@ -1,6 +1,7 @@
 const { network } = require("hardhat");
 
-const deployFunc = async (hre, network) => {
+const deployFunc = async (hre, deploymentNetwork) => {
+  console.log("--- Starting deployment process ---");
   const { getNamedAccounts, deployments } = hre;
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
@@ -9,6 +10,7 @@ const deployFunc = async (hre, network) => {
     from: deployer,
     args: [],
     log: true,
+    waitConfirmations: network.config.blockConfirmations || 1,
   });
   log("---Deployment completed ---");
 };

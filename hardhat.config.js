@@ -19,6 +19,7 @@ module.exports = {
     sepolia: {
       url: SEPOLIA_RPC_URL,
       accounts: [PRIVATE_KEY],
+      blockConfirmations: 1,
     },
     localhost: {
       url: "http://127.0.0.1:8545/",
