@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-// Gas used: 590769 > 567190 > 541930
+error FundMeV2__NotOwner();
 
-error NotOwner();
-
+/**
+ * @title A contract for crowd-funding
+ * @author Syed Rehan
+ * @notice This contract is to demo sample crowd-funding
+ */
 contract FundMeV2 {
     // --- State variables ---
     uint256 public constant MIN_VALUE = 1000 wei;
@@ -14,30 +17,44 @@ contract FundMeV2 {
 
     address public immutable owner;
 
+    // --- Modifiers ---
+
+    modifier managerOnly() {
+        // require(msg.sender == owner, "Only manager can withdraw funds.");
+        if (msg.sender != owner) {
+            revert FundMeV2__NotOwner();
+        }
+        _;
+    }
+
     // --- Constructor ---
 
     constructor() {
         owner = msg.sender;
     }
 
-    // --- Modifiers ---
+    receive() external payable {
+        fund();
+    }
 
-    modifier managerOnly() {
-        // require(msg.sender == owner, "Only manager can withdraw funds.");
-        if (msg.sender != owner) {
-            revert NotOwner();
-        }
-        _;
+    fallback() external payable {
+        fund();
     }
 
     // --- Functions ---
 
+    /**
+     * @notice Function is used to add funds. Minimum value to be funded is 1000 wei.
+     */
     function fund() public payable {
         require(msg.value >= MIN_VALUE, "Minimum 1000 wei is required.");
         funders.push(msg.sender);
         addressToMoneyFunded[msg.sender] += msg.value;
     }
 
+    /**
+     * @notice Only manager can withdraw funds
+     */
     function withdraw() public managerOnly {
         for (
             uint256 funderIndex = 0;
@@ -62,13 +79,5 @@ contract FundMeV2 {
             value: address(this).balance
         }("");
         require(isWithdrawalSuccess, "Withdrawal failed.");
-    }
-
-    receive() external payable {
-        fund();
-    }
-
-    fallback() external payable {
-        fund();
     }
 }
