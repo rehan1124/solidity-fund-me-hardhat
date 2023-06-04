@@ -133,3 +133,4 @@ dist
 gas-report.txt
 artifacts/
 cache/
+coverage.json
