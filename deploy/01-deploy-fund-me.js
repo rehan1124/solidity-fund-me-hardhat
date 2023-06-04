@@ -16,3 +16,4 @@ const deployFunc = async (hre, deploymentNetwork) => {
 };
 
 module.exports = deployFunc;
+module.exports.tags = ["all", "fund-me"];

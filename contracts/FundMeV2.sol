@@ -13,7 +13,7 @@ contract FundMeV2 {
     uint256 public constant MIN_VALUE = 1000 wei;
 
     address[] public funders;
-    mapping(address => uint256) addressToMoneyFunded;
+    mapping(address => uint256) public addressToMoneyFunded;
 
     address public immutable owner;
 

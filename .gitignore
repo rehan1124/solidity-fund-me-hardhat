@@ -131,3 +131,5 @@ dist
 
 # Solidity or Hardhat files
 gas-report.txt
+artifacts/
+cache/
