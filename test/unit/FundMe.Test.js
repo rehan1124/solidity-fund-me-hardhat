@@ -67,5 +67,41 @@ describe("Fund-me", async function () {
         funderBalanceAfterTx.add(gasCost).toString()
       );
     });
+
+    it("Allows to withdraw money contributed by multiple users", async function () {
+      // Arrange
+      const accounts = await ethers.getSigners();
+
+      for (let i = 1; i < 3; i++) {
+        const fundMeConnectedContract = await fundMe.connect(accounts[i]);
+        fundMeConnectedContract.fund({
+          value: ethers.utils.parseUnits("1000", "wei"),
+        });
+      }
+
+      const contractBalance = await fundMe.provider.getBalance(fundMe.address);
+      const deployerBalance = await fundMe.provider.getBalance(deployer);
+
+      // Act
+      const txResponse = await fundMe.withdraw();
+      const txResponseReceipt = await txResponse.wait(1);
+
+      // Assert
+
+      await expect(fundMe.funders(0)).to.be.reverted;
+
+      for (let i = 1; i < 3; i++) {
+        assert.equal(await fundMe.addressToMoneyFunded(accounts[i].address), 0);
+      }
+    });
+
+    it("Only owner is allowed", async function () {
+      const accounts = await ethers.getSigners();
+      const attacker = accounts[1];
+      const attackerWithdraws = await fundMe.connect(attacker);
+      await expect(attackerWithdraws.withdraw()).to.be.rejectedWith(
+        "FundMeV2__NotOwner"
+      );
+    });
   });
 });
