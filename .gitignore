@@ -130,7 +130,7 @@ dist
 .pnp.*
 
 # Solidity or Hardhat files
-gas-report.txt
+# gas-report.txt
 artifacts/
 cache/
 coverage.json
